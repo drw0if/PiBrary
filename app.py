@@ -4,6 +4,7 @@ from flask import Flask
 from flask import render_template
 from flask import request
 from flask import redirect, url_for, flash
+from flask import send_from_directory
 from models import Schema, Book
 from werkzeug.utils import secure_filename
 import os
@@ -81,6 +82,16 @@ def upload():
 def bookPage(_id):
     b = Book()
     return render_template('book.html', book=b.select(_id))
+
+
+@app.route('/book/<int:_id>/download')
+def bookDownload(_id):
+    b = Book()
+    book = b.select(_id)
+    if book:
+        return send_from_directory(app.config['UPLOAD_FOLDER'], book['name'])
+
+    return redirect(url_for('home'))
 
 
 if __name__ == '__main__':
