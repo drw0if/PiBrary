@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content%}
+
+<form enctype="multipart/form-data" method="POST">
+    <input type="file" name="file" id="">
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {{ messages[0] }}
+        {% endif %}
+    {% endwith %}
+    <input type="submit" value="">
+</form>
+
+{% endblock %}
