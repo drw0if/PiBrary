@@ -7,7 +7,8 @@ from flask import redirect, url_for, flash
 from models import Schema, Book
 from werkzeug.utils import secure_filename
 import os
-import random, string
+import random
+import string
 
 app = Flask(__name__)
 
@@ -35,27 +36,27 @@ def upload():
     successMessage = 'File uploaded succesfully'
 
     if request.method == 'POST':
-        #Check for file existance
+        # Check for file existance
         if 'file' not in request.files:
             flash(errorMessage)
             return redirect(url_for('upload'))
 
-        #Check for file consistency
+        # Check for file consistency
         file = request.files['file']
         if file.filename == '':
             flash(errorMessage)
             return redirect(url_for('upload'))
 
-        #Check for file extension
+        # Check for file extension
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
 
-            #Get valid username if submitted
+            # Get valid username if submitted
             username = request.form.get('username', None)
             if username == '':
                 username = None
 
-            #Build filename with random component
+            # Build filename with random component
             filenameSplitted = filename.rsplit('.', 1)
             filename = '.'.join([
                 filenameSplitted[0],
@@ -63,13 +64,13 @@ def upload():
                 filenameSplitted[1]
             ])
 
-            #Save file in storage folder
+            # Save file in storage folder
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            #Save file into the database
+            # Save file into the database
             b = Book()
-            b.create(filename, str(request.remote_addr),username)
+            b.create(filename, str(request.remote_addr), username)
 
-            #Notify
+            # Notify
             flash(successMessage)
             return redirect(url_for('upload'))
 
@@ -79,7 +80,7 @@ def upload():
 @app.route('/book/<int:_id>')
 def bookPage(_id):
     b = Book()
-    return render_template('book.html', book = b.select(_id))
+    return render_template('book.html', book=b.select(_id))
 
 
 if __name__ == '__main__':
