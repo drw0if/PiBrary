@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+
+    {% if book %}
+        <p>{{ book['name'] }} uploaded by {{ book['uploader_username'] }}</p>
+    {% else %}
+        Unable to find the file
+    {% endif %}
+
+{% endblock %}

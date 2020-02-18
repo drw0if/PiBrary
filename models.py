@@ -76,13 +76,25 @@ class Book:
         c.execute(query, values)
         self.conn.commit()
 
-    def select(self):
+    def all(self):
         query = f"""
-        SELECT * FROM {self.TABLENAME};
+        SELECT * FROM "{self.TABLENAME}";
         """
         c = self.conn.cursor()
         c.execute(query)
         return c.fetchall()
+
+    def select(self, _id):
+        query = f"""
+        SELECT *
+        FROM "{self.TABLENAME}"
+        WHERE id = ?;
+        """
+        values = _id,
+
+        c = self.conn.cursor()
+        c.execute(query, values)
+        return c.fetchone()
 
 
 class Vote:

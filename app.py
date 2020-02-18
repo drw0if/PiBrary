@@ -26,7 +26,7 @@ def allowed_file(filename):
 @app.route('/')
 def home():
     B = Book()
-    return render_template('home.html', books=B.select())
+    return render_template('home.html', books=B.all())
 
 
 @app.route('/upload/', methods=['GET', 'POST'])
@@ -74,6 +74,12 @@ def upload():
             return redirect(url_for('upload'))
 
     return render_template('upload.html')
+
+
+@app.route('/book/<int:_id>')
+def bookPage(_id):
+    b = Book()
+    return render_template('book.html', book = b.select(_id))
 
 
 if __name__ == '__main__':
