@@ -21,6 +21,11 @@ Vote:
 
 DBNAME = 'library.db'
 
+def dict_factory(cursor, row):
+    d = {}
+    for idx, col in enumerate(cursor.description):
+        d[col[0]] = row[idx]
+    return d
 
 class Schema:
     def __init__(self):
@@ -62,6 +67,7 @@ class Book:
     def __init__(self):
         self.TABLENAME = 'Book'
         self.conn = sqlite3.connect(DBNAME)
+        self.conn.row_factory = dict_factory
 
     def create(self, name, extension, uploader_ip, uploader_username=None):
         _hash = str(hash(name))
@@ -88,6 +94,7 @@ class Vote:
     def __init__(self):
         self.TABLENAME = 'Vote'
         self.conn = sqlite3.connect(DBNAME)
+        self.conn.row_factory = dict_factory
 
     def create(self, book_id, value, comment=None, username=None):
         query = f"""

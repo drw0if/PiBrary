@@ -1,7 +1,7 @@
 # app.py
 
-from flask import Flask
-from models import Schema
+from flask import Flask, render_template
+from models import Schema, Book
 
 app = Flask(__name__)
 
@@ -12,12 +12,12 @@ get config
 
 @app.route('/')
 def home():
-    return 'Hello world!'
+    B = Book()
+    return render_template('home.html', books = B.select())
 
-
-@app.route('/<name>')
-def greet(name):
-    return f'Hello {name}!'
+@app.route('/upload', methods=['GET', 'POST'])
+def upload():
+    pass
 
 
 if __name__ == '__main__':
