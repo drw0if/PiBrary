@@ -5,8 +5,6 @@ from datetime import datetime as dt
 Book:
     id (incremental)
     name
-    extension
-    hash (stored name)
     uploader_ip
     uploader_username (optional)
     upload_time
@@ -40,8 +38,6 @@ class Schema:
         CREATE TABLE IF NOT EXISTS "Book"(
             id INTEGER PRIMARY KEY,
             name TEXT,
-            extension VARCHAR(10),
-            hash CHAR(64),
             uploader_ip VARCHAR(15),
             uploader_username TEXT,
             upload_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -69,13 +65,12 @@ class Book:
         self.conn = sqlite3.connect(DBNAME)
         self.conn.row_factory = dict_factory
 
-    def create(self, name, extension, uploader_ip, uploader_username=None):
-        _hash = str(hash(name))
+    def create(self, name, uploader_ip, uploader_username=None):
         query = f"""
-        INSERT INTO "{self.TABLENAME}"(name, extension, hash, uploader_ip, uploader_username)
-        VALUES (?, ?, ?, ?, ?);
+        INSERT INTO "{self.TABLENAME}"(name, uploader_ip, uploader_username)
+        VALUES (?, ?, ?);
         """
-        values = (name, extension, _hash, uploader_ip, uploader_username)
+        values = (name, uploader_ip, uploader_username)
 
         c = self.conn.cursor()
         c.execute(query, values)

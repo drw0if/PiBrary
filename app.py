@@ -7,6 +7,7 @@ from flask import redirect, url_for, flash
 from models import Schema, Book
 from werkzeug.utils import secure_filename
 import os
+import random, string
 
 app = Flask(__name__)
 
@@ -34,18 +35,41 @@ def upload():
     successMessage = 'File uploaded succesfully'
 
     if request.method == 'POST':
+        #Check for file existance
         if 'file' not in request.files:
             flash(errorMessage)
             return redirect(url_for('upload'))
 
+        #Check for file consistency
         file = request.files['file']
         if file.filename == '':
             flash(errorMessage)
             return redirect(url_for('upload'))
 
+        #Check for file extension
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
+
+            #Get valid username if submitted
+            username = request.form.get('username', None)
+            if username == '':
+                username = None
+
+            #Build filename with random component
+            filenameSplitted = filename.rsplit('.', 1)
+            filename = '.'.join([
+                filenameSplitted[0],
+                ''.join(random.choices(string.ascii_letters, k=8)),
+                filenameSplitted[1]
+            ])
+
+            #Save file in storage folder
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            #Save file into the database
+            b = Book()
+            b.create(filename, str(request.remote_addr),username)
+
+            #Notify
             flash(successMessage)
             return redirect(url_for('upload'))
 
