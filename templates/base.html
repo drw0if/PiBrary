@@ -1,12 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <title>{{ title }}</title>
+    <script>
+        function $(src) { return document.querySelector(src); }
+    </script>
 </head>
+
 <body>
-    {% block content %}
-    {% endblock %}
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <a href="/" class="navbar-brand">PiBrary</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a href="{{ url_for('list') }}" class="nav-link">List</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url_for('upload') }}" class="nav-link">Upload</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <main role="main" class="container-fluid">
+        <div class="jumbotron-fluid">
+        {% block content %}
+        {% endblock %}
+        </div>
+    </main>
+    <script>
+        document.getElementsByClassName('navbar-toggler')[0].onclick = () => {
+            $('#navbarCollapse').classList.toggle('collapse');
+        };
+    </script>
 </body>
+
 </html>

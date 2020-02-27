@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+
+{% for book in books %}
+<div class="card">
+    <a href="/book/{{ book['id'] }}">
+        <div class="card-body">
+            <h5 class="card-text">
+                {{ book['name'] }}
+            </h5>
+        </div>
+    </a>
+</div>
+{% endfor %}
+
+{% endblock %}

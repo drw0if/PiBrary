@@ -1,6 +1,7 @@
 win_env/
-__pycache__
+linux_env/
+__pycache__/
 .vscode
 library.db
 test.py
-storage
+storage/

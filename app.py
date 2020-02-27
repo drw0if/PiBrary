@@ -26,9 +26,9 @@ def allowed_file(filename):
 
 
 @app.route('/')
-def home():
+def list():
     B = Book()
-    return render_template('home.html', books=B.all())
+    return render_template('list.html', books=B.all())
 
 
 @app.route('/upload/', methods=['GET', 'POST'])
