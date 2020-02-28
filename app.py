@@ -10,15 +10,19 @@ from werkzeug.utils import secure_filename
 import os
 import random
 import string
+from config import Config
 
 app = Flask(__name__)
 
 """
 get config
 """
-app.config['UPLOAD_FOLDER'] = 'storage/'
-app.secret_key = 'asd'
-ALLOWED_EXTENSIONS = {'pdf', 'epub'}
+
+config = Config().getConfiguration()
+
+app.config['UPLOAD_FOLDER'] = config['storageFolder']
+app.secret_key = config['secretKey']
+ALLOWED_EXTENSIONS = config['extensions']
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB
 
 

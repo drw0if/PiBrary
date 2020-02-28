@@ -1,1 +1,5 @@
-Extensions:
+storageFolder : /upload
+secretKey : asdasdasd
+extensions:
+  - pdf
+  - epub
