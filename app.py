@@ -19,6 +19,7 @@ get config
 app.config['UPLOAD_FOLDER'] = 'storage/'
 app.secret_key = 'asd'
 ALLOWED_EXTENSIONS = {'pdf', 'epub'}
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB
 
 
 def allowed_file(filename):
@@ -39,17 +40,21 @@ def upload():
     if request.method == 'POST':
         # Check for file existance
         if 'file' not in request.files:
-            flash(errorMessage)
+            flash(errorMessage, 'error')
             return redirect(url_for('upload'))
 
         # Check for file consistency
         file = request.files['file']
         if file.filename == '':
-            flash(errorMessage)
+            flash(errorMessage, 'error')
             return redirect(url_for('upload'))
 
         # Check for file extension
-        if file and allowed_file(file.filename):
+        if file:
+            if not allowed_file(file.filename):
+                flash(errorMessage, 'error')
+                return redirect(url_for('upload'))
+
             filename = secure_filename(file.filename)
 
             # Get valid username if submitted
@@ -72,7 +77,7 @@ def upload():
             b.create(filename, str(request.remote_addr), username)
 
             # Notify
-            flash(successMessage)
+            flash(successMessage, 'success')
             return redirect(url_for('upload'))
 
     return render_template('upload.html')

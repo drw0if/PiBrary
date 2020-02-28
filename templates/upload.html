@@ -1,15 +1,25 @@
 {% extends "base.html" %}
 {% block content%}
+{% with messages = get_flashed_messages() %}
+<form enctype="multipart/form-data" method="POST" class="container">
+    <div class="form-group">
+        <input type="text" class="form-control" name="username" id="inputUsername" placeholder="Username">
+    </div>
 
-<form enctype="multipart/form-data" method="POST">
-    <input type="file" name="file" id="">
-    {% with messages = get_flashed_messages() %}
+    <div class="custom-file">
+        <input type="file" class="custom-file-input" name="file" id="validatedCustomFile" required>
+        <label for="validatedCustomFile" class="custom-file-label">Choose ebook</label>
+
         {% if messages %}
-            {{ messages[0] }}
+            <small class="form-text">{{ messages[0] }}</small>
         {% endif %}
-    {% endwith %}
-    <input type="text" name="username" id="">
-    <input type="submit" value="">
-</form>
 
+    </div>
+
+    <div class="row">
+        <button type="submit" class="btn btn-dark upload-btn" value="">SUBMIT</button>
+    </div>
+
+</form>
+{% endwith %}
 {% endblock %}
