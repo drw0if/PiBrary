@@ -3,7 +3,7 @@
 {% with messages = get_flashed_messages() %}
 <form enctype="multipart/form-data" method="POST" class="container">
     <div class="form-group">
-        <input type="text" class="form-control" name="username" id="inputUsername" placeholder="Username">
+        <input type="text" maxlength="20" class="form-control" name="username" id="inputUsername" placeholder="Username">
     </div>
 
     <div class="custom-file">
