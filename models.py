@@ -118,9 +118,24 @@ class Vote:
 
     def select(self, book_id):
         query = f"""
-        SELECT * FROM {self.TABLENAME} WHERE book_id = ?;
+        SELECT * 
+        FROM {self.TABLENAME}
+        WHERE book_id = ?;
         """
         values = book_id,
+        
         c = self.conn.cursor()
         c.execute(query, values)
         return c.fetchall()
+
+    def avg(self, _id):
+        query = f"""
+        SELECT avg(value) as vote 
+        FROM {self.TABLENAME} 
+        WHERE book_id = ?;
+        """
+        values = _id,
+
+        c = self.conn.cursor()
+        c.execute(query, values)
+        return c.fetchone()
