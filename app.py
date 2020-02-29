@@ -5,7 +5,7 @@ from flask import render_template
 from flask import request
 from flask import redirect, url_for, flash
 from flask import send_from_directory
-from models import Schema, Book
+from models import Schema, Book, Vote
 from werkzeug.utils import secure_filename
 import os
 import random
@@ -19,6 +19,10 @@ get config
 """
 
 config = Config().getConfiguration()
+
+"""
+set config
+"""
 
 app.config['UPLOAD_FOLDER'] = config['storageFolder']
 app.secret_key = config['secretKey']
@@ -65,6 +69,8 @@ def upload():
             username = request.form.get('username', None)
             if username == '':
                 username = None
+            else:
+                username = username[:20]
 
             # Build filename with random component
             filenameSplitted = filename.rsplit('.', 1)
@@ -87,10 +93,15 @@ def upload():
     return render_template('upload.html')
 
 
-@app.route('/book/<int:_id>')
+@app.route('/book/<int:_id>', methods=['GET', 'POST'])
 def bookPage(_id):
     b = Book()
-    return render_template('book.html', book=b.select(_id))
+    v = Vote()
+    if request.method == 'POST':
+        print('aggiungi voto')
+
+        return redirect(url_for(f'/book/{_id}'))
+    return render_template('book.html', book=b.select(_id), reviews=v.select(_id), vote=v.avg(_id)['vote'])
 
 
 @app.route('/book/<int:_id>/download')
@@ -105,4 +116,4 @@ def bookDownload(_id):
 
 if __name__ == '__main__':
     Schema()
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0')

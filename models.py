@@ -120,7 +120,8 @@ class Vote:
         query = f"""
         SELECT * 
         FROM {self.TABLENAME}
-        WHERE book_id = ?;
+        WHERE book_id = ? AND comment IS NOT NULL
+        LIMIT 5;
         """
         values = book_id,
         

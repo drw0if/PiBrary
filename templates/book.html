@@ -2,7 +2,82 @@
 {% block content %}
 
     {% if book %}
-        <p>{{ book['name'] }} uploaded by {{ book['uploader_username'] }}</p>
+        <div class="row">
+            <div class="col-lg-8 col-md">
+                <div class="row d-flex">
+                    <div class="col-12 d-flex justify-content-center pt-4">
+                        <p class="text-break book-title d-block">{{ book['name'] }}</p>
+                    </div>
+                    <div class="col-12 d-flex justify-content-center pb-4">
+                        <a href="/book/{{ book['id'] }}/download">
+                            <button class="btn btn-dark">
+                                DOWNLOAD
+                            </button>    
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- User stuff -->
+            <div class="col-lg-4 col-md d-flex justify-content-center">
+                <div class="card col-lg-8 col-md">
+                    <div class="row d-flex justify-content-center">
+                        <img src="{{ url_for('static', filename='images/user.svg') }}" class="card-img-top img-user">
+                    </div>
+                    <div class="card-body">
+                        <p class="text-center">uploaded by
+                            {% if book['uploader_username'] %}
+                                {{ book['uploader_username'] }}
+                            {% else %}
+                                Unknown user
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- vote -->
+        <div class="row d-flex">
+            <div class="col">
+                <p>
+                    Vote: 
+                    {% if vote %}
+                        {{ vote }}
+                    {% else %}
+                        N/A
+                    {% endif %}
+
+                </p>
+            </div>            
+        </div>
+        <!-- reviews -->
+        {% for r in reviews %}
+        <div class="row">
+            <div class="col-3">
+                <div class="col d-flex justify-content-center">
+                    <img src="{{ url_for('static', filename='images/user.svg') }}" class="rounded-circle review_image" alt="Avatar">
+                </div>
+                <div class="col d-flex justify-content-center">
+                    <p class="mb-0 font-weight-bold">
+                        {% if r['username'] %}
+                            {{ r['username'] }}
+                        {% else %}
+                            Unknown
+                        {% endif %}
+                    </p>
+                </div>
+                <div class="col d-flex justify-content-center">
+                    <p class="text mb-0">
+                        Vote: {{ r['value'] }}
+                    </p>
+                </div>
+            </div>
+            <div class="col">
+
+            </div>
+        </div>
+        {% endfor %}
+
+
     {% else %}
         Unable to find the file
     {% endif %}
