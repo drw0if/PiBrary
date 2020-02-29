@@ -5,12 +5,12 @@
         <div class="row">
             <div class="col-lg-8 col-md">
                 <div class="row d-flex">
-                    <div class="col-12 d-flex justify-content-center pt-4">
-                        <p class="text-break book-title d-block">{{ book['name'] }}</p>
+                    <div class="col-12 d-flex justify-content-center pt-5">
+                        <p class="text-break book-title">{{ book['name'] }}</p>
                     </div>
                     <div class="col-12 d-flex justify-content-center pb-4">
                         <a href="/book/{{ book['id'] }}/download">
-                            <button class="btn btn-dark">
+                            <button class="btn btn-dark p-3">
                                 DOWNLOAD
                             </button>    
                         </a>
@@ -18,7 +18,7 @@
                 </div>
             </div>
             <!-- User stuff -->
-            <div class="col-lg-4 col-md d-flex justify-content-center">
+            <div class="col-lg-4 col-md d-flex justify-content-center mb-3">
                 <div class="card col-lg-8 col-md">
                     <div class="row d-flex justify-content-center">
                         <img src="{{ url_for('static', filename='images/user.svg') }}" class="card-img-top img-user">
@@ -36,48 +36,86 @@
             </div>
         </div>
         <!-- vote -->
-        <div class="row d-flex">
-            <div class="col">
-                <p>
-                    Vote: 
+        <div class="row">
+            <div class="col d-flex justify-content-center">
+                <h2 class="text font-weight-bold">
+                    Average vote: 
                     {% if vote %}
                         {{ vote }}
                     {% else %}
-                        N/A
+                        No review yet
                     {% endif %}
 
-                </p>
+                </h2>
             </div>            
         </div>
         <!-- reviews -->
         {% for r in reviews %}
-        <div class="row">
-            <div class="col-3">
-                <div class="col d-flex justify-content-center">
-                    <img src="{{ url_for('static', filename='images/user.svg') }}" class="rounded-circle review_image" alt="Avatar">
+        <hr>
+        <div class="row pt-2 pb-2">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-2 col-4">
+                        <div class="d-flex justify-content-center">
+                            <img src="{{ url_for('static', filename='images/user.svg') }}" class="rounded-circle review_image" alt="Avatar">
+                        </div>
+                        <div class="d-flex justify-content-center">
+                            <p class="">
+                                Vote: {{ r['value'] }}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-lg-8">
+                        <h5 class="mb-0 font-weight-bold pb-3">
+                            {% if r['username'] %}
+                                {{ r['username'] }}
+                            {% else %}
+                                Unknown
+                            {% endif %}
+                        </h5>
+                        <p class="text text-break">
+                            {% if r['comment'] %}
+                                {{ r['comment'] }}
+                            {% endif %}
+                        </p>
+                    </div>
                 </div>
-                <div class="col d-flex justify-content-center">
-                    <p class="mb-0 font-weight-bold">
-                        {% if r['username'] %}
-                            {{ r['username'] }}
-                        {% else %}
-                            Unknown
-                        {% endif %}
-                    </p>
-                </div>
-                <div class="col d-flex justify-content-center">
-                    <p class="text mb-0">
-                        Vote: {{ r['value'] }}
-                    </p>
-                </div>
-            </div>
-            <div class="col">
-
             </div>
         </div>
+        
         {% endfor %}
+        <hr>
+        <!-- review form -->
+        <div class="row pb-5">
+            <div class="col-lg-8 col-12 mx-auto">
+                <h2 class="pb-3">Write your review</h4>
+                <form action="" method="POST">
 
-
+                    <div class="form-group">
+                        <p class="d-inline">Rate: </p>
+                        <label for="1">1</label>
+                        <input type="radio" name="vote" value="1" required>
+                        <label for="2">2</label>
+                        <input type="radio" name="vote" value="2">
+                        <label for="3">3</label>
+                        <input type="radio" name="vote" value="3">
+                        <label for="4">4</label>
+                        <input type="radio" name="vote" value="4">
+                        <label for="5">5</label>
+                        <input type="radio" name="vote" value="5">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="username" class="form-control" placeholder="Username">
+                    </div>
+                    <div class="form-group">
+                        <textarea name="comment" class="form-control" placeholder="Review"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-dark">
+                        Post
+                    </button>
+                </form>
+            </div>
+        </div>
     {% else %}
         Unable to find the file
     {% endif %}
