@@ -7,8 +7,8 @@
     </div>
 
     <div class="custom-file">
-        <input type="file" class="custom-file-input" name="file" id="validatedCustomFile" required>
-        <label for="validatedCustomFile" class="custom-file-label">Choose ebook</label>
+        <input type="file" class="custom-file-input" name="file" id="inputFile" required>
+        <label for="inputFile" class="custom-file-label" id="inputFileLabel">Choose ebook</label>
 
         {% if messages %}
             <small class="form-text">{{ messages[0] }}</small>
@@ -21,5 +21,11 @@
     </div>
 
 </form>
+<script>
+    $('#inputFile').onchange = () => {
+        let files = $('#inputFile').files
+        $('#inputFileLabel').innerText = (files.length === 0) ? 'Choose ebook' : files[0].name
+    }
+</script>
 {% endwith %}
 {% endblock %}
