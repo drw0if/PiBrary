@@ -25,7 +25,6 @@ class Config():
         for l in labels:
             try:
                 if not isinstance(rawConfig[l[0]], l[1]):
-
                     raise KeyError
                 self.configuration[l[0]] = rawConfig[l[0]]
             except KeyError:

@@ -1,4 +1,4 @@
-storageFolder : /upload
+storageFolder : storage/
 secretKey : asdasdasd
 extensions:
   - pdf
