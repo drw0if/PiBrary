@@ -1,12 +1,14 @@
 {% extends "base.html" %}
 {% block content%}
 {% with messages = get_flashed_messages() %}
+<div class="container h-100 d-flex align-items-center">
+
 <form enctype="multipart/form-data" method="POST" class="container">
-    <div class="form-group">
+    <div class="form-group pb-3">
         <input type="text" maxlength="20" class="form-control" name="username" id="inputUsername" placeholder="Username">
     </div>
 
-    <div class="custom-file">
+    <div class="custom-file pb-3">
         <input type="file" class="custom-file-input" name="file" id="inputFile" required>
         <label for="inputFile" class="custom-file-label text-truncate" id="inputFileLabel">Choose ebook</label>
 
@@ -16,11 +18,12 @@
 
     </div>
 
-    <div class="row">
+    <div class="d-flex justify-content-center">
         <button type="submit" class="btn btn-dark upload-btn" value="">SUBMIT</button>
     </div>
 
 </form>
+</div>
 <script>
     $('#inputFile').onchange = () => {
         let files = $('#inputFile').files
