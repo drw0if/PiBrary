@@ -5,6 +5,7 @@ from flask import render_template
 from flask import request
 from flask import redirect, url_for, flash
 from flask import send_from_directory
+from flask import abort
 from models import Schema, Book, Vote
 from werkzeug.utils import secure_filename
 import os
@@ -66,11 +67,12 @@ def upload():
             filename = secure_filename(file.filename)
 
             # Get valid username if submitted
-            username = request.form.get('username', None)
-            if username == '':
+            try:
+                username = request.form.get('username').strip()[:20] # At most 20 characters
+                if username == '':
+                    raise AttributeError
+            except (TypeError, AttributeError) as e:
                 username = None
-            else:
-                username = username[:20]
 
             # Build filename with random component
             filenameSplitted = filename.rsplit('.', 1)
@@ -93,18 +95,47 @@ def upload():
     return render_template('upload.html')
 
 
-@app.route('/book/<int:_id>', methods=['GET', 'POST'])
+@app.route('/book/<int:_id>/', methods=['GET', 'POST'])
 def bookPage(_id):
     b = Book()
     v = Vote()
+
+    book = b.select(_id)
+    if book is None:
+        abort(404)
+
     if request.method == 'POST':
-        print('aggiungi voto')
 
-        return redirect(url_for(f'/book/{_id}'))
-    return render_template('book.html', book=b.select(_id), reviews=v.select(_id), vote=v.avg(_id)['vote'])
+        try:
+            vote = int(request.form.get('vote'))
+            if vote < 1 or vote > 5:
+                raise ValueError
+        except (ValueError, TypeError) as e:
+            flash('Invalid vote', 'error')
+            return redirect(url_for('.bookPage', _id=_id))
+
+        try:
+            username = request.form.get('username').strip()[:20] # At most 20 characters
+            if username == '':
+                raise AttributeError
+        except (TypeError, AttributeError) as e:
+            username = None
+
+        try:
+            review = request.form.get('review').strip()[:500] # At most 500 characters
+            if review == '':
+                raise AttributeError
+        except (TypeError, AttributeError) as e:
+            review = None
+
+        v.create(_id, vote, review, username)
+        flash('Review added correctly')
+        return redirect(url_for('.bookPage', _id=_id))
+
+    return render_template('book.html', book=b.select(_id), reviews=v.pickRandom(_id), vote=v.avg(_id)['vote'])
 
 
-@app.route('/book/<int:_id>/download')
+@app.route('/book/<int:_id>/download/')
 def bookDownload(_id):
     b = Book()
     book = b.select(_id)

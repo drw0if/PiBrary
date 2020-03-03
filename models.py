@@ -12,7 +12,7 @@ Book:
 Vote:
     book_id
     value
-    comment (optional)
+    review (optional)
     username (optional)
 
 """
@@ -52,7 +52,7 @@ class Schema:
         CREATE TABLE IF NOT EXISTS "Vote"(
             id INTEGER PRIMARY KEY,
             value INTEGER,
-            comment TEXT,
+            review TEXT,
             username TEXT,
 
             book_id INTEGER FOREIGNKEY REFERENCES Book(id)
@@ -105,22 +105,23 @@ class Vote:
         self.conn = sqlite3.connect(DBNAME)
         self.conn.row_factory = dict_factory
 
-    def create(self, book_id, value, comment=None, username=None):
+    def create(self, book_id, value, review=None, username=None):
         query = f"""
-        INSERT INTO "{self.TABLENAME}"(value, comment, username, book_id)
+        INSERT INTO "{self.TABLENAME}"(value, review, username, book_id)
         VALUES (?, ?, ?, ?);
         """
-        values = (value, comment, username, book_id)
+        values = (value, review, username, book_id)
 
         c = self.conn.cursor()
         c.execute(query, values)
         self.conn.commit()
 
-    def select(self, book_id):
+    def pickRandom(self, book_id):
         query = f"""
         SELECT * 
         FROM {self.TABLENAME}
-        WHERE book_id = ? AND comment IS NOT NULL
+        WHERE book_id = ? AND review IS NOT NULL
+        ORDER BY RANDOM()
         LIMIT 5;
         """
         values = book_id,

@@ -41,7 +41,7 @@
                 <h2 class="text font-weight-bold">
                     Average vote: 
                     {% if vote %}
-                        {{ vote }}
+                        {{ '%.1f' % vote }}
                     {% else %}
                         No review yet
                     {% endif %}
@@ -74,8 +74,8 @@
                             {% endif %}
                         </h5>
                         <p class="text text-break">
-                            {% if r['comment'] %}
-                                {{ r['comment'] }}
+                            {% if r['review'] %}
+                                {{ r['review'] }}
                             {% endif %}
                         </p>
                     </div>
@@ -108,11 +108,16 @@
                         <input type="text" name="username" class="form-control" placeholder="Username">
                     </div>
                     <div class="form-group">
-                        <textarea name="comment" class="form-control" placeholder="Review"></textarea>
+                        <textarea name="review" class="form-control" placeholder="Review"></textarea>
                     </div>
                     <button type="submit" class="btn btn-dark">
                         Post
                     </button>
+                    {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                            <small class="form-text">{{ messages[0] }}</small>
+                        {% endif %}
+                    {% endwith %}
                 </form>
             </div>
         </div>
