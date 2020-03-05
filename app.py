@@ -28,7 +28,7 @@ set config
 app.config['UPLOAD_FOLDER'] = config['storageFolder']
 app.secret_key = config['secretKey']
 ALLOWED_EXTENSIONS = config['extensions']
-app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB
+app.config['MAX_CONTENT_LENGTH'] = 20 * 1024 * 1024  # 16MB
 
 
 def allowed_file(filename):
