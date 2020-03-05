@@ -108,8 +108,6 @@ def bookPage(_id):
 
         try:
             vote = int(request.form.get('vote'))
-            if vote < 1 or vote > 5:
-                raise ValueError
         except (ValueError, TypeError) as e:
             flash('Invalid vote', 'error')
             return redirect(url_for('.bookPage', _id=_id))
@@ -128,7 +126,13 @@ def bookPage(_id):
         except (TypeError, AttributeError) as e:
             review = None
 
-        v.create(_id, vote, review, username)
+        try:
+            v.create(_id, vote, review, username)
+        except ValueError as e:
+            print('EXCEPTION HITTATA')
+            flash('Invalid vote', 'error')
+            return redirect(url_for('.bookPage', _id=_id))
+
         flash('Review added correctly')
         return redirect(url_for('.bookPage', _id=_id))
 

@@ -41,7 +41,7 @@ class Schema:
             id INTEGER PRIMARY KEY,
             name TEXT,
             uploader_ip VARCHAR(15),
-            uploader_username TEXT,
+            uploader_username VARCHAR(20),
             upload_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );
         """
@@ -51,9 +51,9 @@ class Schema:
         query = """
         CREATE TABLE IF NOT EXISTS "Vote"(
             id INTEGER PRIMARY KEY,
-            value INTEGER,
+            value INTEGER CHECK(value BETWEEN 1 AND 5),
             review TEXT,
-            username TEXT,
+            username VARCHAR(20),
 
             book_id INTEGER FOREIGNKEY REFERENCES Book(id)
         );
@@ -113,7 +113,10 @@ class Vote:
         values = (value, review, username, book_id)
 
         c = self.conn.cursor()
-        c.execute(query, values)
+        try:
+            c.execute(query, values)
+        except sqlite3.IntegrityError:
+            raise ValueError
         self.conn.commit()
 
     def pickRandom(self, book_id):
