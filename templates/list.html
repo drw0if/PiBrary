@@ -1,16 +1,23 @@
 {% extends "base.html" %}
 {% block content %}
 
-{% for book in books %}
-<div class="card">
-    <a href="/book/{{ book['id'] }}">
-        <div class="card-body">
-            <h5 class="card-text">
-                {{ book['name'] }}
-            </h5>
-        </div>
-    </a>
-</div>
-{% endfor %}
+{% if books %}
+    {% for book in books %}
+    <div class="card">
+        <a href="/book/{{ book['id'] }}">
+            <div class="card-body">
+                <h5 class="card-text">
+                    {{ book['name'] }}
+                </h5>
+            </div>
+        </a>
+    </div>
+    {% endfor %}
+{% else %}
+    <div class="h-100 d-flex justify-content-center align-items-center">
+        <h3 class="">No books yet</h3>
+    </div>
+{% endif %}
+
 
 {% endblock %}
